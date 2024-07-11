@@ -1,0 +1,87 @@
+HashRouter change url to '#/whateverRouteYouNeed' so tecnically it's not a part of url
+
+A <MemoryRouter> stores its locations internally in an array, so there is no visible change in url. May be good for testing
+
+StaticRouter is supposed to be used from server. If 'location' passed that would always start router from that location
+
+The useParams hook returns an object of key/value pairs of the dynamic params from the current URL that were matched by the <Route path>. Child routes inherit all params from their parent routes.
+
+before v6 react router went from top to bottom and used first match.
+starting v6 it uses the most specific route. So hardcoded route has higher priority than dynamic one.
+
+example for not found page: <Route path="*" element={<NotFound />} />
+
+example of nested route:
+        <Route path="/books">
+          <Route index element={<BookList />} /> // path /books
+          <Route path=":id" element={<Book />} /> // path /books/:id
+          <Route path="new" element={<NewBook />} />
+        </Route>
+
+
+Component <Outlet/> should be defined in parent component of nested route. It defines where nested components would be rendered. Parent may not have 'path' part, then it would be used not for routing as such, but for passing elements common for nested routes.
+
+useOutletContext returns the value which was passed as Outlet's property 'context'
+
+if two or more routes (from different routers) points to the same url elements that belong to both would be displayed in the order they defined (top to bottom). MAy be usefull for sidebar that is the same for mosts pages but different for 1 or a few specific pages.
+
+router may may be nested. to do this
+  1) define component that returns routes
+  2) define in parant router a route with path ending with * (for example '/books/*')
+  3) define mentioned component (see 1) as an element of parent's route
+
+
+The useRoutes hook is the functional equivalent of <Routes>, but it uses JavaScript objects instead of <Route> elements to define your routes. These objects have the same properties as normal <Route> elements, but they don't require JSX.
+
+<Link/>
+  "replace" property of a <Link/> replaces location so if element '3' has replace then clicking 1->2->3 attempt to go back form '3' would lead to '1' since '2' were replaced in a history.
+  Potential use case: login page -> redirect page with 'replace' (prevent user from going back to login page)
+
+  "reloadDocument" property of a <Link/> causes document to be reloaded
+
+
+  The "state"  of a <Link/> property can be used to set a stateful value for the new location which is stored inside history state. This value can subsequently be accessed via useLocation().
+      <Link to="new-path" state={{ some: "value" }} />
+    You can access this state value while on the "new-path" route:
+      let { state } = useLocation();
+
+<NavLink>
+  classname  style children - should be set to funtion ({isActive, isPending, isTransitioning}) => {}
+
+    classname should return concatenated class names
+
+    style should return objct with classes
+
+    childeren - allows to use {isActive, isPending, isTransitioning} in a function for conditional rendering of a child
+
+
+  By default, an active class is added to a <NavLink> component when it is active so you can use CSS to style it.
+
+  example:
+    <NavLink
+      to="/messages"
+      style={({ isActive, isPending, isTransitioning }) => {
+        return {
+          fontWeight: isActive ? "bold" : "",
+          color: isPending ? "red" : "black",
+          viewTransitionName: isTransitioning ? "slide" : "",
+        };
+      }}
+    >
+
+  end
+    The end prop changes the matching logic for the active and pending states to only match to the "end" of the NavLink's to path. If the URL is longer than to, it will no longer be considered active. so if parent has '/books'
+     and child has '/books/1' url than with 'end' only '/books' would make parent active
+
+
+  A <Navigate> element changes the current location when it is rendered.
+
+useNavigate hook returns function that allows navigation. IF such function CALLED WITH -1 that would work as a back button, -2 causes to return 2 history records back and so on.
+
+The useSearchParams hook is used to read and modify the query string in the URL for the current location. Like React's own useState hook, useSearchParams returns an array of two values: the current location's search params and a function that may be used to update them. Just as React's useState hook, setSearchParams also supports functional updates.
+
+useSearchParams returns value as instance of URLSearchParams class (you can use 'get' for getting values). Also value of search param may be received via useLocation hook ('search' field of returned value)
+
+'state' property passed in Link/NavLink can be accessed via 'useLocation' hook. Specifically property 'state' of returned value
+
+useLocation can also return hash value from url under 'hash' property
