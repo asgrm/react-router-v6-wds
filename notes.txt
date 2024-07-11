@@ -25,7 +25,7 @@ useOutletContext returns the value which was passed as Outlet's property 'contex
 
 if two or more routes (from different routers) points to the same url elements that belong to both would be displayed in the order they defined (top to bottom). MAy be usefull for sidebar that is the same for mosts pages but different for 1 or a few specific pages.
 
-router may may be nested. to do this
+router may be nested. to do this
   1) define component that returns routes
   2) define in parant router a route with path ending with * (for example '/books/*')
   3) define mentioned component (see 1) as an element of parent's route
@@ -46,7 +46,7 @@ The useRoutes hook is the functional equivalent of <Routes>, but it uses JavaScr
       let { state } = useLocation();
 
 <NavLink>
-  classname  style children - should be set to funtion ({isActive, isPending, isTransitioning}) => {}
+    classname  style children - should be set to function ({isActive, isPending, isTransitioning}) => {}
 
     classname should return concatenated class names
 
